@@ -6,15 +6,18 @@ A sentence that lands after the budget is not a run. Tool time is added in code.
 
 ## Stack
 
-TypeScript, React, Next.js, Zod, Vitest. The model call will use the Vercel AI SDK. The timed tool will be one MCP tool, `spend`.
+TypeScript, React, Next.js, Zod, Vitest. The model client is the Vercel AI SDK. The timed tool is one MCP tool, `spend`. Node 22.
 
 ## Run
 
 ```bash
 npm install
-npm test
+cp .env.example .env.local
+npm run check
 npm run dev
 ```
+
+`DEMO=true` is the public setting. The model stays local, with or without a key. `npm run check` is format, lint, types, and tests. CI runs that, then the production build.
 
 ## The frozen case
 
