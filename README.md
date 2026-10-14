@@ -23,6 +23,8 @@ npm run dev
 
 Two spends, 900 ms and 800 ms, against a 1 500 ms budget. No sentence.
 
+Without a key, a local planner replays that case and may still write the sentence. The run drops it. The eval does not call the network.
+
 ## License
 
 [MIT](LICENSE)
