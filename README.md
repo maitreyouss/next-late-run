@@ -25,6 +25,10 @@ Two spends, 900 ms and 800 ms, against a 1 500 ms budget. No sentence.
 
 Without a key, a local planner replays that case and may still write the sentence. The run drops it. The eval does not call the network.
 
+## Page
+
+Two actions replay a run. Late: 900 ms and 800 ms, no sentence. In budget: 400 ms and 500 ms, the sentence stays. Each replay shows the spends, the sum, and the 1 500 ms budget.
+
 ## License
 
 [MIT](LICENSE)

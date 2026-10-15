@@ -6,6 +6,7 @@ import { readSpend, recordSpend, SPEND_TOOL, spendInput, type SpendResult } from
 
 export const PROPOSED_SENTENCE = "The run finished in time.";
 export const FROZEN_ELAPSED = [900, 800] as const;
+export const FIT_ELAPSED = [400, 500] as const;
 
 export type PlannedRun = {
   sentence: string;
@@ -57,15 +58,19 @@ function plannedFromTurn(turn: ModelTurn): PlannedRun {
   };
 }
 
-export function createLocalPlanner(): Planner {
+export function createScriptedPlanner(elapsed: readonly number[]): Planner {
   return {
     async plan() {
       return {
         sentence: PROPOSED_SENTENCE,
-        spends: FROZEN_ELAPSED.map((elapsedMs) => recordSpend({ elapsedMs })),
+        spends: elapsed.map((elapsedMs) => recordSpend({ elapsedMs })),
       };
     },
   };
+}
+
+export function createLocalPlanner(): Planner {
+  return createScriptedPlanner(FROZEN_ELAPSED);
 }
 
 export function createLivePlanner(
