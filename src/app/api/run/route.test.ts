@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 
 import { POST } from "@/app/api/run/route";
+import { readEnv } from "@/lib/env";
+import { allow, runLimit } from "@/lib/http/rate-limit";
 import { PROPOSED_SENTENCE } from "@/lib/planner";
 
 function request(body: unknown) {
@@ -44,5 +46,22 @@ describe("POST /api/run", () => {
       new Request("http://localhost/api/run", { method: "POST", body: "nope" }),
     );
     expect(response.status).toBe(400);
+  });
+
+  it("refuses a run past the hourly cap", async () => {
+    const key = "203.0.113.50";
+    const limit = runLimit(readEnv().mode);
+    for (let i = 0; i < limit.limit; i += 1) {
+      expect(allow(key, limit.limit, limit.windowMs)).toBe(true);
+    }
+    const response = await POST(
+      new Request("http://localhost/api/run", {
+        method: "POST",
+        headers: { "x-forwarded-for": key },
+        body: JSON.stringify({ case: "late" }),
+      }),
+    );
+    expect(response.status).toBe(429);
+    await expect(response.json()).resolves.toEqual({ error: "Too many runs. Try again later." });
   });
 });

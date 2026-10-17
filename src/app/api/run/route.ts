@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { readEnv } from "@/lib/env";
+import { allow, clientKey, runLimit } from "@/lib/http/rate-limit";
 import { replay } from "@/lib/replay";
 
 export const dynamic = "force-dynamic";
@@ -19,6 +21,11 @@ export async function POST(request: Request) {
   const parsed = bodySchema.safeParse(json);
   if (!parsed.success) {
     return Response.json({ error: "The case must be late or fit." }, { status: 400 });
+  }
+
+  const limit = runLimit(readEnv().mode);
+  if (!allow(clientKey(request), limit.limit, limit.windowMs)) {
+    return Response.json({ error: "Too many runs. Try again later." }, { status: 429 });
   }
 
   return Response.json(await replay(parsed.data.case));

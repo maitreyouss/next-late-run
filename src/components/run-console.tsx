@@ -86,7 +86,7 @@ export function RunConsole() {
               {run.sentence === null ? "No sentence." : run.sentence}
             </p>
           </>
-        ) : (
+        ) : error ? null : (
           <p className="idle">Replay a run.</p>
         )}
       </div>

@@ -19,6 +19,8 @@ npm run dev
 
 `DEMO=true` is the public setting. The model stays local, with or without a key. `npm run check` is format, lint, types, and tests. CI runs that, then the production build.
 
+One address can replay 60 runs an hour. A live key lowers that to 20. The count stays in the memory of the process and starts again when the process does.
+
 ## The frozen case
 
 Two spends, 900 ms and 800 ms, against a 1 500 ms budget. No sentence.
